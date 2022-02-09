@@ -59,5 +59,6 @@ rSL_fit <- rSL(X=X, A=A, Y=Y, SL_Y = SL.lib, SL_A = SL.lib, SL_CATE = SL.lib,
 \references{
 {
   \insertRef{nie2021quasi}{SL.wrappers}
+  \insertRef{SuperLearner}{SL.wrappers}
 }
 }
