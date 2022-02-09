@@ -15,10 +15,10 @@
 #' @return An object of type \code{rSL}.
 #' @export
 #'
-#' @references{
-#'   \insertRef{nie2021quasi}{SL.wrappers}
-#'   \insertRef{SuperLearner}{SL.wrappers}
-#' }
+#' @references
+#' \insertRef{nie2021quasi}{SL.wrappers}
+#'
+#' \insertRef{SuperLearner}{SL.wrappers}
 #'
 #' @importFrom Rdpack reprompt
 #'
