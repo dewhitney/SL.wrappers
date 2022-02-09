@@ -69,7 +69,7 @@ r.xgboost <- function (Y, X, newX = X, family = gaussian(), obsWeights = NULL,
   }
   pred <- predict(model, newX)
   fit <- list(object = model)
-  class(fit) <- c("r.xgboost")
+  class(fit) <- c("cvboost")
   out <- list(pred = pred, fit = fit)
   return(out)
 }
