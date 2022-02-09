@@ -17,6 +17,7 @@
 #'
 #' @references{
 #'   \insertRef{nie2021quasi}{SL.wrappers}
+#'   \insertRef{SuperLearner}{SL.wrappers}
 #' }
 #'
 #' @importFrom Rdpack reprompt
