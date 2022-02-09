@@ -56,3 +56,8 @@ Y = pmax(X[,1], 0) * A + X[,2] + pmin(X[,3], 0) + rnorm(n)
 rSL_fit <- rSL(X=X, A=A, Y=Y, SL_Y = SL.lib, SL_A = SL.lib, SL_CATE = SL.lib,
                cvControl = list(V=10))
 }
+\references{
+{
+  \insertRef{nie2021quasi}{SL.wrappers}
+}
+}

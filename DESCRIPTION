@@ -15,8 +15,10 @@ Imports:
     xgboost,
     rlearner,
     stats,
-    Matrix
+    Matrix,
+    Rdpack
 Suggests: 
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
+RdMacros: Rdpack
 RoxygenNote: 7.1.2

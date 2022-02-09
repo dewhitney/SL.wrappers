@@ -15,6 +15,12 @@
 #' @return An object of type \code{rSL}.
 #' @export
 #'
+#' @references{
+#'   \insertRef{nie2021quasi}{SL.wrappers}
+#' }
+#'
+#' @importFrom Rdpack reprompt
+#'
 #' @examples
 #' library(SuperLearner)
 #' SL.lib <- "SL.glmnet"
