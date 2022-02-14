@@ -1,7 +1,7 @@
 
 #' Wrapper function for xgboost based on \code{rlearner::rboost}
 #'
-#' This function can be used to automate hyperparameter tuning for prediction using \code{xgboost}. Its input/output follows the template required for wrapper functions in the \code{SuperLearner} package.
+#' This function automates hyperparameter tuning for prediction using \code{xgboost}. Its input/output follows the template required for wrapper functions in the \code{SuperLearner} package.
 #'
 #' @param Y The outcome in the training data set. Must be a numeric vector.
 #' @param X The predictor variables in the training data set, usually a data.frame.
@@ -27,22 +27,20 @@
 #'
 #' x = matrix(rnorm(n*p), n, p)
 #' y = pmax(x[,1], 0) + x[,2] + pmin(x[,3], 0) + rnorm(n)
-#' fit = r.xgboost(y, data.frame(x), newX = data.frame(x),
+#' fit = SL.cvboost(y, data.frame(x), newX = data.frame(x),
 #' family = gaussian(), obsWeights = NULL)
 #' est = fit$pred
-r.xgboost <- function (Y, X, newX = X, family = gaussian(), obsWeights = NULL,
+SL.cvboost <- function (Y, X, newX = X, family = gaussian(), obsWeights = NULL,
                        id = NULL, k_folds = 5L, ntrees_max = 1000, num_search_rounds = 10,
                        early_stopping_rounds = 10, nthread = 1, verbose = FALSE,
                        print_every_n = 100, ...) {
-  require("xgboost")
-  require("rlearner")
   if (utils::packageVersion("xgboost") < 0.6)
-    stop("r.xgboost requires xgboost version >= 0.6")
+    stop("Requires xgboost version >= 0.6")
   if (!is.matrix(X)) {
     X = model.matrix(~. - 1, X)
   }
   if (family$family == "gaussian") {
-    if (packageVersion("xgboost") >= "1.1.1.1") {
+    if (utils::packageVersion("xgboost") >= "1.1.1.1") {
       objective <- "reg:squarederror"
     }
     else {
@@ -65,11 +63,45 @@ r.xgboost <- function (Y, X, newX = X, family = gaussian(), obsWeights = NULL,
     warning("'multinomial' is not a supported family at this time")
   }
   if (!is.matrix(newX)) {
-    newX <- model.matrix(~. - 1, newX)
+    newX <- stats::model.matrix(~. - 1, newX)
   }
-  pred <- predict(model, newX)
+
+  # Debugging prediction
+  dtest <- xgboost::xgb.DMatrix(data=newX)
+  pred <- predict(model$xgb_fit, newdata=dtest)
+
   fit <- list(object = model)
-  class(fit) <- c("cvboost")
+  class(fit) <- c("SL.cvboost")
   out <- list(pred = pred, fit = fit)
   return(out)
 }
+
+
+#' Prediction for wrapper SL.cvboost
+#'
+#' @param object SL.cvboost object
+#' @param newdata Dataframe to generate predictions
+#' @param ... Unused additional arguments
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' #' set.seed(1)
+#' n = 100; p = 5
+#'
+#' x = matrix(rnorm(n*p), n, p)
+#' y = pmax(x[,1], 0) + x[,2] + pmin(x[,3], 0) + rnorm(n)
+#' fit = SL.cvboost(y, data.frame(x), newX = data.frame(x),
+#' family = gaussian(), obsWeights = NULL)
+#' est = predict(fit$fit)
+predict.SL.cvboost <- function(object, newdata=NULL, ...) {
+  if (is.null(newdata)) {
+    return(object$object$best_xgb_cvfit$pred)
+  }
+  else{
+    dtest <- xgboost::xgb.DMatrix(data=newdata)
+    return(predict(object$object$xgb_fit, newdata=dtest))
+  }
+}
+
