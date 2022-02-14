@@ -34,11 +34,8 @@ SL.cvboost <- function (Y, X, newX = X, family = gaussian(), obsWeights = NULL,
                        id = NULL, k_folds = 5L, ntrees_max = 1000, num_search_rounds = 10,
                        early_stopping_rounds = 10, nthread = 1, verbose = FALSE,
                        print_every_n = 100, ...) {
-  if (utils::packageVersion("xgboost") < 0.6)
-    stop("Requires xgboost version >= 0.6")
-  if (!is.matrix(X)) {
-    X = model.matrix(~. - 1, X)
-  }
+  # if (!is.matrix(X)) { X = model.matrix(~. - 1, X) }
+  X = model.matrix(~. - 1, X)
   if (family$family == "gaussian") {
     if (utils::packageVersion("xgboost") >= "1.1.1.1") {
       objective <- "reg:squarederror"
