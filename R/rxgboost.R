@@ -97,6 +97,7 @@ predict.SL.cvboost <- function(object, newdata=NULL, ...) {
     return(object$object$best_xgb_cvfit$pred)
   }
   else{
+    newdata <- model.matrix(~. - 1, newdata)
     dtest <- xgboost::xgb.DMatrix(data=newdata)
     return(predict(object$object$xgb_fit, newdata=dtest))
   }
