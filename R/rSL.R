@@ -40,19 +40,19 @@ rSL <- function(X, A, Y, Y_family = gaussian(), A_family = binomial(),
   Y_fit <- SuperLearner::SuperLearner(Y, X, family = Y_family,
                                       SL.library = SL_Y, control = control,
                                       cvControl = cvControl)
-  m_hat <- Y_fit$SL.predict
+  m_hat <- c(Y_fit$SL.predict)
   # print(m_hat)
 
   A_fit <- SuperLearner::SuperLearner(A, X, family = A_family,
                                       SL.library = SL_A, control = control,
                                       cvControl = cvControl)
-  p_hat <- A_fit$SL.predict
+  p_hat <- c(A_fit$SL.predict)
 
   Y_tilde <- Y - m_hat
   A_tilde <- A - p_hat
   pseudo_outcome <- Y_tilde/A_tilde
 
-  weights <- A_tilde^2
+  weights <- unlist(A_tilde)^2
 
   tau_fit <- SuperLearner::SuperLearner(pseudo_outcome, X, family = gaussian(),
                                         SL.library = SL_CATE,
