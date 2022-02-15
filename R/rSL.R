@@ -52,7 +52,7 @@ rSL <- function(X, A, Y, Y_family = gaussian(), A_family = binomial(),
   A_tilde <- A - p_hat
   pseudo_outcome <- Y_tilde/A_tilde
 
-  weights <- unlist(A_tilde)^2
+  weights <- c(A_tilde)^2
 
   tau_fit <- SuperLearner::SuperLearner(pseudo_outcome, X, family = gaussian(),
                                         SL.library = SL_CATE,
